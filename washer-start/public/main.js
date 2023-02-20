@@ -50,7 +50,7 @@ SmartHome.prototype.initFirebase = () => {
 SmartHome.prototype.initWasher = () => {
   console.log("Logged in as default user");
   this.uid = "123";
-  this.smarthome.userWelcome.innerHTML = "Welcome user 123!";
+  this.smarthome.userWelcome.innerHTML = "Welcome user 12323232!";
 
   this.smarthome.handleData();
   this.smarthome.washer.style.display = "block";

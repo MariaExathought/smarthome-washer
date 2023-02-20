@@ -69,12 +69,12 @@ SmartHome.prototype.handleData = () => {
   const elStartStopRunning = document.getElementById('demo-washer-startStopRunning');
   console.log('elOnOff ---->',elOnOff)
 
-  firebase.database().ref('/').child('washer').on("value", (snapshot) => {
+  // firebase.database().ref('/').child('washer').on("value", (snapshot) => {
     console.log('in side firebase database ---->')
 
     console.log('in side firebase database ---->',snapshot.val())
 
-    if (snapshot.exists()) {
+    // if (snapshot.exists()) {
       const washerState = snapshot.val();
       console.log(washerState)
 
@@ -90,8 +90,8 @@ SmartHome.prototype.handleData = () => {
       if (washerState.StartStop.isRunning) elStartStopRunning.MaterialSwitch.on();
       else elStartStopRunning.MaterialSwitch.off();
 
-    }
-  })
+    // }
+  // })
 }
 
 SmartHome.prototype.updateState = () => {

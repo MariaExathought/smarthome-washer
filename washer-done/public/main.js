@@ -77,7 +77,8 @@ SmartHome.prototype.handleData = () => {
     "demo-washer-startStopRunning"
   );
   console.log("FIREBASE CONSOLR", firebase);
-  console.log("CONSOLE -----> Data base", firebase.User());
+  console.log("CONSOLE -----> App", firebase.app());
+  console.log("CONSOLE -----> Apps", firebase.apps());
 
   console.log("CONSOLE -----> Data base", firebase.database());
   console.log("CONSOLE ----->", firebase.database().ref("/"));

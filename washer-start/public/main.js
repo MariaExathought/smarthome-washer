@@ -89,17 +89,17 @@ SmartHome.prototype.handleData = () => {
   // console.log(washerState)
   let washerState = {};
 
-  if (washerState) elOnOff.MaterialSwitch.on();
-  else elOnOff.MaterialSwitch.off();
+  if (washerState) elOnOff.MaterialSwitch;
+  else elOnOff.MaterialSwitch;
 
-  if (washerState) elRunCycle.MaterialSwitch.on();
-  else elRunCycle.MaterialSwitch.off();
+  if (washerState) elRunCycle.MaterialSwitch;
+  else elRunCycle.MaterialSwitch;
 
-  if (washerState) elStartStopPaused.MaterialSwitch.on();
-  else elStartStopPaused.MaterialSwitch.off();
+  if (washerState) elStartStopPaused.MaterialSwitch;
+  else elStartStopPaused.MaterialSwitch;
 
-  if (washerState) elStartStopRunning.MaterialSwitch.on();
-  else elStartStopRunning.MaterialSwitch.off();
+  if (washerState) elStartStopRunning.MaterialSwitch;
+  else elStartStopRunning.MaterialSwitch;
 
   // }
   // })

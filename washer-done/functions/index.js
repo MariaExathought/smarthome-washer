@@ -135,6 +135,9 @@ app.onSync((body) => {
 });
 
 const queryFirebase = async (deviceId) => {
+  console.log('firebaseRef -----> CONSOLE ',firebaseRef)
+  console.log('firebaseRef -----> CONSOLE child ',firebaseRef.child())
+
   const snapshot = await firebaseRef.child(deviceId).once('value');
   const snapshotVal = snapshot.val();
   return {

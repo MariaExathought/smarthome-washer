@@ -13,33 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
+"use strict";
 
 // Initializes the SmartHome.
 function SmartHome() {
-  document.addEventListener('DOMContentLoaded', function () {
-    // Shortcuts to DOM Elements.
-    this.denyButton = document.getElementById('demo-deny-button');
-    this.userWelcome = document.getElementById('user-welcome');
+  document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+      // Shortcuts to DOM Elements.
+      this.denyButton = document.getElementById("demo-deny-button");
+      this.userWelcome = document.getElementById("user-welcome");
 
-    // Bind events.
-    this.updateButton = document.getElementById('demo-washer-update');
-    this.updateButton.addEventListener('click', this.updateState.bind(this));
-    this.washer = document.getElementById('demo-washer');
-    this.requestSync = document.getElementById('request-sync');
-    this.requestSync.addEventListener('click', async () => {
-      try {
-        const response = await fetch('/requestsync');
-        console.log(response.status == 200 ?
-          'Request SYNC success!' : `Request SYNC unexpected status: ${response.status}`);
-      } catch (err) {
-        console.error('Request SYNC error', err);
-      }
-    });
+      // Bind events.
+      this.updateButton = document.getElementById("demo-washer-update");
+      this.updateButton.addEventListener("click", this.updateState.bind(this));
+      this.washer = document.getElementById("demo-washer");
+      this.requestSync = document.getElementById("request-sync");
+      this.requestSync.addEventListener("click", async () => {
+        try {
+          const response = await fetch("/requestsync");
+          console.log(
+            response.status == 200
+              ? "Request SYNC success!"
+              : `Request SYNC unexpected status: ${response.status}`
+          );
+        } catch (err) {
+          console.error("Request SYNC error", err);
+        }
+      });
 
-    this.initFirebase();
-    this.initWasher();
-  }.bind(this));
+      this.initFirebase();
+      this.initWasher();
+    }.bind(this)
+  );
 }
 
 SmartHome.prototype.initFirebase = () => {
@@ -51,68 +57,76 @@ SmartHome.prototype.initWasher = () => {
   console.log("Logged in as default user");
   this.uid = "123";
   this.smarthome.userWelcome.innerHTML = "Welcome user";
-  console.log('IN HERE')
+  console.log("IN HERE");
   this.smarthome.handleData();
   this.smarthome.washer.style.display = "block";
-}
+};
 
 SmartHome.prototype.setToken = (token) => {
-  document.cookie = '__session=' + token + ';max-age=3600';
+  document.cookie = "__session=" + token + ";max-age=3600";
 };
 
 SmartHome.prototype.handleData = () => {
   const uid = this.uid;
-  console.log('UID ---->',uid)
-  const elOnOff = document.getElementById('demo-washer-onOff');
-  const elRunCycle = document.getElementById('demo-washer-runCycle');
-  const elStartStopPaused = document.getElementById('demo-washer-startStopPaused');
-  const elStartStopRunning = document.getElementById('demo-washer-startStopRunning');
-  console.log('elOnOff ---->',elOnOff)
+  console.log("UID ---->", uid);
+  const elOnOff = document.getElementById("demo-washer-onOff");
+  const elRunCycle = document.getElementById("demo-washer-runCycle");
+  const elStartStopPaused = document.getElementById(
+    "demo-washer-startStopPaused"
+  );
+  const elStartStopRunning = document.getElementById(
+    "demo-washer-startStopRunning"
+  );
+  console.log("elOnOff ---->", elOnOff);
 
   // firebase.database().ref('/').child('washer').on("value", (snapshot) => {
-    console.log('in side firebase database ---->')
+  console.log("in side firebase database ---->");
 
-    // console.log('in side firebase database ---->',snapshot.val())
+  // console.log('in side firebase database ---->',snapshot.val())
 
-    // if (snapshot.exists()) {
-      // const washerState = snapshot.val();
-      // console.log(washerState)
-      let washerState ={}
+  // if (snapshot.exists()) {
+  // const washerState = snapshot.val();
+  // console.log(washerState)
+  let washerState = {};
 
-      if (washerState.OnOff) elOnOff.MaterialSwitch.on();
-      else elOnOff.MaterialSwitch.off();
+  if (washerState) elOnOff.MaterialSwitch.on();
+  else elOnOff.MaterialSwitch.off();
 
-      if (washerState.RunCycle) elRunCycle.MaterialSwitch.on();
-      else elRunCycle.MaterialSwitch.off();
+  if (washerState) elRunCycle.MaterialSwitch.on();
+  else elRunCycle.MaterialSwitch.off();
 
-      if (washerState.StartStop) elStartStopPaused.MaterialSwitch.on();
-      else elStartStopPaused.MaterialSwitch.off();
+  if (washerState) elStartStopPaused.MaterialSwitch.on();
+  else elStartStopPaused.MaterialSwitch.off();
 
-      if (washerState.StartStop) elStartStopRunning.MaterialSwitch.on();
-      else elStartStopRunning.MaterialSwitch.off();
+  if (washerState) elStartStopRunning.MaterialSwitch.on();
+  else elStartStopRunning.MaterialSwitch.off();
 
-    // }
+  // }
   // })
-}
+};
 
 SmartHome.prototype.updateState = () => {
-  const elOnOff = document.getElementById('demo-washer-onOff');
-  const elRunCycle = document.getElementById('demo-washer-runCycle');
-  const elStartStopPaused = document.getElementById('demo-washer-startStopPaused');
-  const elStartStopRunning = document.getElementById('demo-washer-startStopRunning');
+  const elOnOff = document.getElementById("demo-washer-onOff");
+  const elRunCycle = document.getElementById("demo-washer-runCycle");
+  const elStartStopPaused = document.getElementById(
+    "demo-washer-startStopPaused"
+  );
+  const elStartStopRunning = document.getElementById(
+    "demo-washer-startStopRunning"
+  );
 
   const pkg = {
-    OnOff: { on: elOnOff.classList.contains('is-checked') },
-    RunCycle: { dummy: elRunCycle.classList.contains('is-checked') },
+    OnOff: { on: elOnOff.classList.contains("is-checked") },
+    RunCycle: { dummy: elRunCycle.classList.contains("is-checked") },
     StartStop: {
-      isPaused: elStartStopPaused.classList.contains('is-checked'),
-      isRunning: elStartStopRunning.classList.contains('is-checked')
-    }
+      isPaused: elStartStopPaused.classList.contains("is-checked"),
+      isRunning: elStartStopRunning.classList.contains("is-checked"),
+    },
   };
 
   console.log(pkg);
-  firebase.database().ref('/').child('washer').set(pkg);
-}
+  firebase.database().ref("/").child("washer").set(pkg);
+};
 
 // Load the SmartHome.
 window.smarthome = new SmartHome();

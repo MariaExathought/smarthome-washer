@@ -75,19 +75,20 @@ SmartHome.prototype.handleData = () => {
     // console.log('in side firebase database ---->',snapshot.val())
 
     // if (snapshot.exists()) {
-      const washerState = snapshot.val();
-      console.log(washerState)
+      // const washerState = snapshot.val();
+      // console.log(washerState)
+      let washerState ={}
 
-      if (washerState.OnOff.on) elOnOff.MaterialSwitch.on();
+      if (washerState.OnOff?.on) elOnOff.MaterialSwitch.on();
       else elOnOff.MaterialSwitch.off();
 
-      if (washerState.RunCycle.dummy) elRunCycle.MaterialSwitch.on();
+      if (washerState.RunCycle?.dummy) elRunCycle.MaterialSwitch.on();
       else elRunCycle.MaterialSwitch.off();
 
-      if (washerState.StartStop.isPaused) elStartStopPaused.MaterialSwitch.on();
+      if (washerState.StartStop?.isPaused) elStartStopPaused.MaterialSwitch.on();
       else elStartStopPaused.MaterialSwitch.off();
 
-      if (washerState.StartStop.isRunning) elStartStopRunning.MaterialSwitch.on();
+      if (washerState.StartStop?.isRunning) elStartStopRunning.MaterialSwitch.on();
       else elStartStopRunning.MaterialSwitch.off();
 
     // }

@@ -23,7 +23,10 @@ const util = require('util');
 const admin = require('firebase-admin');
 // Initialize Firebase
 admin.initializeApp();
+console.log('FIRE BASE admin--->',admin,'\n',admin.database())
+
 const firebaseRef = admin.database().ref('/');
+console.log('FIRE BASE --->',firebaseRef)
 // Initialize Homegraph
 const auth = new google.auth.GoogleAuth({
   scopes: ['https://www.googleapis.com/auth/homegraph'],

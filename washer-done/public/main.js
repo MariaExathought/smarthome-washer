@@ -78,8 +78,6 @@ SmartHome.prototype.handleData = () => {
   );
   console.log("FIREBASE CONSOLR", firebase);
   console.log("CONSOLE -----> App", firebase.app());
-  console.log("CONSOLE -----> Apps", firebase.apps());
-
   console.log("CONSOLE -----> Data base", firebase.database());
   console.log("CONSOLE ----->", firebase.database().ref("/"));
   firebase

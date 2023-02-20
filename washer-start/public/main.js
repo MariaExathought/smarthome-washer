@@ -72,7 +72,7 @@ SmartHome.prototype.handleData = () => {
   // firebase.database().ref('/').child('washer').on("value", (snapshot) => {
     console.log('in side firebase database ---->')
 
-    console.log('in side firebase database ---->',snapshot.val())
+    // console.log('in side firebase database ---->',snapshot.val())
 
     // if (snapshot.exists()) {
       const washerState = snapshot.val();

@@ -22,6 +22,7 @@ const {google} = require('googleapis');
 const util = require('util');
 const admin = require('firebase-admin');
 // Initialize Firebase
+console.log('WHERE IS IT ')
 admin.initializeApp();
 console.log('FIRE BASE admin--->',admin,'\n',admin.database())
 

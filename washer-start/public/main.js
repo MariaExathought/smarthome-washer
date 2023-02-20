@@ -50,8 +50,8 @@ SmartHome.prototype.initFirebase = () => {
 SmartHome.prototype.initWasher = () => {
   console.log("Logged in as default user");
   this.uid = "123";
-  this.smarthome.userWelcome.innerHTML = "Welcome user 123!";
-
+  this.smarthome.userWelcome.innerHTML = "Welcome user";
+  console.log('IN HERE')
   this.smarthome.handleData();
   this.smarthome.washer.style.display = "block";
 }
@@ -62,6 +62,7 @@ SmartHome.prototype.setToken = (token) => {
 
 SmartHome.prototype.handleData = () => {
   const uid = this.uid;
+  console.log('UID ---->',uid)
   const elOnOff = document.getElementById('demo-washer-onOff');
   const elRunCycle = document.getElementById('demo-washer-runCycle');
   const elStartStopPaused = document.getElementById('demo-washer-startStopPaused');

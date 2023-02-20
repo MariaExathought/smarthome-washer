@@ -67,8 +67,13 @@ SmartHome.prototype.handleData = () => {
   const elRunCycle = document.getElementById('demo-washer-runCycle');
   const elStartStopPaused = document.getElementById('demo-washer-startStopPaused');
   const elStartStopRunning = document.getElementById('demo-washer-startStopRunning');
+  console.log('elOnOff ---->',elOnOff)
 
   firebase.database().ref('/').child('washer').on("value", (snapshot) => {
+    console.log('in side firebase database ---->')
+
+    console.log('in side firebase database ---->',snapshot.val())
+
     if (snapshot.exists()) {
       const washerState = snapshot.val();
       console.log(washerState)

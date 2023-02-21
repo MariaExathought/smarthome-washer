@@ -20,7 +20,7 @@ const functions = require('firebase-functions');
 const {smarthome} = require('actions-on-google');
 const {google} = require('googleapis');
 const util = require('util');
-const admin = require('firebase-admin');
+const admin = require('firebase');
 // Initialize Firebase
 admin.initializeApp();
 const firebaseRef = admin.database().ref('/');

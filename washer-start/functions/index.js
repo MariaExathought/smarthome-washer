@@ -106,6 +106,7 @@ exports.faketoken = functions.https.onRequest((request, response) => {
 const app = smarthome();
 
 app.onSync((body) => {
+  console.log('onSync --> body',body)
   return {
     requestId: body.requestId,
     payload: {
@@ -143,29 +144,114 @@ app.onSync((body) => {
 const queryFirebase = async (deviceId) => {
   const snapshot = await firebaseRef.child(deviceId).once("value");
   const snapshotVal = snapshot.val();
-  // TODO: Define device states to return
-  return {};
+  return {
+    on: snapshotVal.OnOff.on,
+    isPaused: snapshotVal.StartStop.isPaused,
+    isRunning: snapshotVal.StartStop.isRunning,
+  };
 };
 
-// eslint-disable-next-line
 const queryDevice = async (deviceId) => {
   const data = await queryFirebase(deviceId);
-  // TODO: Define device states to return
-  return {};
+  return {
+    on: data.on,
+    isPaused: data.isPaused,
+    isRunning: data.isRunning,
+    currentRunCycle: [
+      {
+        currentCycle: "rinse",
+        nextCycle: "spin",
+        lang: "en",
+      },
+    ],
+    currentTotalRemainingTime: 1212,
+    currentCycleRemainingTime: 301,
+  };
 };
 
-app.onQuery((body) => {
-  // TODO: Implement QUERY response
-  return {};
+app.onQuery(async (body) => {
+  console.log('onQuery --> body',body)
+  const { requestId } = body;
+  const payload = {
+    devices: {},
+  };
+  const queryPromises = [];
+  const intent = body.inputs[0];
+  for (const device of intent.payload.devices) {
+    const deviceId = device.id;
+    queryPromises.push(
+      queryDevice(deviceId).then((data) => {
+        // Add response to device payload
+        payload.devices[deviceId] = data;
+      })
+    );
+  }
+  // Wait for all promises to resolve
+  await Promise.all(queryPromises);
+  return {
+    requestId: requestId,
+    payload: payload,
+  };
 });
-
 const updateDevice = async (execution, deviceId) => {
-  // TODO: Add commands to change device states
-};
+  console.log('updateDevice ---->',execution, deviceId)
+  const { params, command } = execution;
+  let state;
+  let ref;
+  switch (command) {
+    case "action.devices.commands.OnOff":
+      state = { on: params.on };
+      ref = firebaseRef.child(deviceId).child("OnOff");
+      break;
+    case "action.devices.commands.StartStop":
+      state = { isRunning: params.start };
+      ref = firebaseRef.child(deviceId).child("StartStop");
+      break;
+    case "action.devices.commands.PauseUnpause":
+      state = { isPaused: params.pause };
+      ref = firebaseRef.child(deviceId).child("StartStop");
+      break;
+  }
 
-app.onExecute((body) => {
-  // TODO: Implement EXECUTE response
-  return {};
+  return ref.update(state).then(() => state);
+};
+app.onExecute(async (body) => {
+  console.log('onExecute --> body',body)
+
+  const { requestId } = body;
+  // Execution results are grouped by status
+  const result = {
+    ids: [],
+    status: "SUCCESS",
+    states: {
+      online: true,
+    },
+  };
+
+  const executePromises = [];
+  const intent = body.inputs[0];
+  for (const command of intent.payload.commands) {
+    for (const device of command.devices) {
+      for (const execution of command.execution) {
+        executePromises.push(
+          updateDevice(execution, device.id)
+            .then((data) => {
+              result.ids.push(device.id);
+              Object.assign(result.states, data);
+            })
+            .catch(() => functions.logger.error("EXECUTE", device.id))
+        );
+      }
+    }
+  }
+
+  await Promise.all(executePromises);
+  return {
+    requestId: requestId,
+    payload: {
+      commands: [result],
+    },
+  };
 });
 
 app.onDisconnect((body, headers) => {
